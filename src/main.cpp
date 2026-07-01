@@ -3,8 +3,8 @@
 #include <Animations.h>
 #include <Wire.h>
 
-const int I2C_SDA = 4;
-const int I2C_SCL = 5;
+const int I2C_SDA = D4;
+const int I2C_SCL = D5;
 
 void setup() {
   Wire.begin(I2C_SDA, I2C_SCL);
