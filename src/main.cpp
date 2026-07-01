@@ -4,6 +4,8 @@
 #include <LittleFS.h>
 #include <PNGdec.h>
 
+#include <Eyes.h>
+
 // =====================
 // NANO PNG EYE TEST
 // GC9A01 240x240 round display
@@ -235,6 +237,8 @@ void setup()
   }
 
   drawEyePNG("/neutral_open.png");
+
+  draw_eyes();
 }
 
 // =====================
