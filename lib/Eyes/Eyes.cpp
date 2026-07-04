@@ -1,5 +1,10 @@
 #include "Eyes.h"
 
+#include <Arduino_GFX_Library.h>
+#include <LittleFS.h>
+#include <PNGdec.h>
+#include "Mood.h"
+
 // Static global handles (only one instance needed)
 static Arduino_DataBus* leftBus = nullptr;
 static Arduino_DataBus* rightBus = nullptr;
@@ -7,6 +12,8 @@ static Arduino_GFX* leftEye = nullptr;
 static Arduino_GFX* rightEye = nullptr;
 
 static PNG png;
+
+static EyeExpression currentEyeExpression = EYES_NEUTRAL;
 
 // =====================
 // PNG DRAW CALLBACK (STATIC)
@@ -32,8 +39,7 @@ static int _pngDrawCallback(PNGDRAW* pDraw) {
 // INIT DISPLAYS AND LITTLEFS
 // =====================
 bool eyesInit() {
-  Serial.begin(115200);
-  delay(1000);
+
 
   // Initialize buses
   leftBus = new Arduino_ESP32SPI(LEFT_DC, LEFT_CS, TFT_SCK, TFT_MOSI, -1);
@@ -130,40 +136,97 @@ bool eyesDrawPNG(const char* filename) {
 // =====================
 // ANIMATION UTILITY FUNCTIONS
 // =====================
-void eyesBlink() {
-  eyesDrawPNG("/closed_tight.png");
-  delay(100);
-  eyesDrawPNG("/neutral_open.png");
-}
+void eyesRestoreMood() {
+  switch (getMood())
+  {
+    case MOOD_HAPPY:
+      eyesHappy();
+      break;
+    
+      case MOOD_BORED:
+      eyesBored();
+      break;
 
-void eyesLookLeft() {
-  eyesDrawPNG("/look_left.png");
-  delay(3000);
-  eyesDrawPNG("/neutral_open.png");
-}
+    case MOOD_SLEEPY:
+      eyesSleepy();
+      break;
 
-void eyesLookRight() {
-  eyesDrawPNG("/look_right.png");
-  delay(3000);
-  eyesDrawPNG("/neutral_open.png");
+    case MOOD_SHY:
+      eyesLookLeft();
+      break;
+    
+    default:
+      eyesNeutral();
+      break;
+  }
 }
 
 void eyesNeutral() {
+  currentEyeExpression = EYES_NEUTRAL;
   eyesDrawPNG("/neutral_open.png");
 }
 
 void eyesHappy() {
+  currentEyeExpression = EYES_HAPPY;
   eyesDrawPNG("/happy.png");
-  delay(3000);
-  eyesDrawPNG("/neutral_open.png");
 }
 
-void eyesSlowBlink() {
+void eyesShy() {
+  currentEyeExpression = EYES_SHY;
+  eyesDrawPNG("/look_left.png");
+}
+
+void eyesBored() {
+  currentEyeExpression = EYES_BORED;
   eyesDrawPNG("/slow_blink_1.png");
-  delay(3000);
+}
+
+void eyesSleepy() {
+  currentEyeExpression = EYES_SLEEPY;
   eyesDrawPNG("/slow_blink_2.png");
-  delay(3000);
-  eyesDrawPNG("/neutral_open.png");
+}
+
+void eyesSetExpression(EyeExpression expression) {
+  switch (expression) {
+    case EYES_HAPPY:  eyesHappy();  break;
+    case EYES_SHY:    eyesShy();    break;
+    case EYES_BORED:  eyesBored();  break;
+    case EYES_SLEEPY: eyesSleepy(); break;
+    default:          eyesNeutral(); break;
+  }
+}
+
+void eyesLookLeft()
+{
+    eyesSetExpression(EYES_SHY);
+}
+
+void eyesLookRight()
+{
+    eyesDrawPNG("/look_right.png");
+}
+
+void eyesSlowBlink()
+{
+    eyesDrawPNG("/slow_blink_1.png");
+    delay(300);
+    eyesDrawPNG("/slow_blink_2.png");
+    delay(300);
+    eyesRestoreExpression();
+}
+
+void eyesRestoreExpression() {
+  EyeExpression saved = currentEyeExpression;
+  eyesSetExpression(saved);
+}
+
+void eyesBlink() {
+  EyeExpression saved = currentEyeExpression;
+
+  eyesDrawPNG("/closed_tight.png");
+  delay(100);
+
+  eyesSetExpression(saved);
 }
 
 // =====================

@@ -1,0 +1,21 @@
+{
+  "name": "SerialCommands",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "Eyes"
+    },
+    {
+      "name": "Mood"
+    },
+    {
+      "name": "Animations"
+    },
+    {
+      "name": "Motion"
+    },
+    {
+      "name": "Servos"
+    }
+  ]
+}

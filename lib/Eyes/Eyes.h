@@ -1,10 +1,9 @@
 #ifndef Eyes_h
 #define Eyes_h
 
+#pragma once
+
 #include <Arduino.h>
-#include <Arduino_GFX_Library.h>
-#include <LittleFS.h>
-#include <PNGdec.h>
 
 // Display configuration
 #define EYES_WIDTH  240
@@ -20,8 +19,23 @@
 #define RIGHT_DC  D7
 
 // Colors
-#define RGB565_BLACK  0x0000
-#define RGB565_RED    0xF800
+//#define RGB565_BLACK  0x0000
+//#define RGB565_RED    0xF800
+
+
+enum EyeExpression {
+  EYES_NEUTRAL,
+  EYES_HAPPY,
+  EYES_SHY,
+  EYES_BORED,
+  EYES_SLEEPY
+};
+
+void eyesSetExpression(EyeExpression expression);
+void eyesRestoreExpression();
+
+void eyesBored();
+void eyesSleepy();
 
 // Public API Functions
 bool eyesInit();
@@ -33,6 +47,7 @@ void eyesNeutral();
 void eyesHappy();
 void eyesSlowBlink();
 void eyesListFiles();
+
 
 // Internal helper (not for direct use in sketch)
 void _eyesDrawPNG(const char* filename);

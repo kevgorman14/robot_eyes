@@ -1,46 +1,30 @@
 #include <Arduino.h>
-#include <Eyes.h>
-#include <Animations.h>
-#include <Wire.h>
 
-const int I2C_SDA = D4;
-const int I2C_SCL = D5;
+#include "Servos.h"
+#include "Motion.h"
+#include "Animations.h"
+#include "Eyes.h"
+#include "Mood.h"
+#include"SerialCommands.h"
 
 void setup() {
-  Wire.begin(I2C_SDA, I2C_SCL);
+  Serial.begin(115200);
+  delay(500);
 
-  setupServoLimits();
+  eyesInit();
+  servoInit();
+  
+  moodInit();
 
-  pwmLower.begin();
-  pwmLower.setPWMFreq(SERVO_FREQ);
-  pwmUpper.begin();
-  pwmUpper.setPWMFreq(SERVO_FREQ);
+  poseSit();
+  serialCommandsInit();
 
-  animExcited(10);
+  setMood(MOOD_NEUTRAL);
 
-  eyesInit();  // Initialize everything
-
-  // Test
-  eyesNeutral();
-  delay(1000);
-
-  eyesHappy();
-  delay(1000);
-
-  eyesBlink();
-  delay(1000);
-
-  eyesLookLeft();
-  delay(1000);
-
-  eyesLookRight();
-  delay(1000);
-
-  eyesSlowBlink();
-
+  Serial.println("Nano ready");
 }
 
 void loop() {
-  eyesBlink();
-  delay(5000);
+  serialCommandsUpdate();
+  moodUpdate();
 }

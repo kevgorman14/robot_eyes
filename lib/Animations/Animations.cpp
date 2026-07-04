@@ -1,61 +1,7 @@
 #include "Animations.h"
-
-Adafruit_PWMServoDriver pwmLower = Adafruit_PWMServoDriver(0x40);
-Adafruit_PWMServoDriver pwmUpper = Adafruit_PWMServoDriver(0x41);
-
-int servoMin[16];
-int servoMax[16];
-int neutralAngles[16]; // also used as current angle tracker by smoothMove()
-int lastKnownHeadPos = neutral_head_yaw;
-
-void setupServoLimits() {
-  for (int i = 0; i < 16; i++) {
-    servoMin[i] = 0;
-    servoMax[i] = 180;
-    neutralAngles[i] = 90;
-  }
-
-  // Left hip pitch: min 5, max 120, standing 90
-  servoMin[L_HIP_PITCH] = 5;
-  servoMax[L_HIP_PITCH] = 120;
-  neutralAngles[L_HIP_PITCH] = neutral_L_hip_pitch;
-
-  // Left hip roll: numeric clamp must be low to high: 70 to 105
-  servoMin[L_HIP_ROLL] = 70;
-  servoMax[L_HIP_ROLL] = 105;
-  neutralAngles[L_HIP_ROLL] = neutral_L_hip_roll;
-
-  // Left knee: min 20, max 100, standing 100
-  servoMin[L_KNEE] = 20;
-  servoMax[L_KNEE] = 100;
-  neutralAngles[L_KNEE] = neutral_L_knee;
-
-  // Right hip pitch: min 10, max 130, standing 30
-  servoMin[R_HIP_PITCH] = 10;
-  servoMax[R_HIP_PITCH] = 130;
-  neutralAngles[R_HIP_PITCH] = neutral_R_hip_pitch;
-
-  // Right hip roll: numeric clamp must be low to high: 80 to 130
-  servoMin[R_HIP_ROLL] = 80;
-  servoMax[R_HIP_ROLL] = 130;
-  neutralAngles[R_HIP_ROLL] = neutral_R_hip_roll;
-
-  // Right knee: min 50, max 150, standing 50
-  servoMin[R_KNEE] = 50;
-  servoMax[R_KNEE] = 150;
-  neutralAngles[R_KNEE] = neutral_R_knee;
-
-  // Head
-  servoMin[HEAD_YAW] = head_left;
-  servoMax[HEAD_YAW] = head_right;
-  neutralAngles[HEAD_YAW] = neutral_head_yaw;
-
-  servoMin[HEAD_PITCH] = head_up;
-  servoMax[HEAD_PITCH] = head_down;
-  neutralAngles[HEAD_PITCH] = neutral_head_pitch;
-
-  lastKnownHeadPos = neutral_head_yaw;
-}
+#include "Servos.h"
+#include "Config.h"
+#include "Motion.h"
 
 void animExcited(int cycles)
 {
@@ -339,72 +285,5 @@ void animTap(int cycles)
   {
     smoothMove(L_KNEE, L_knee_up - 5, 150);
     smoothMove(L_KNEE, L_knee_up, 150);
-  }
-}
-
-void smoothMove(int channel, int target, int duration)
-{
-  if (channel < 0 || channel > 15 || !isConfiguredChannel(channel))
-  {
-    Serial.print("[ERROR] Bad smooth channel: ");
-    Serial.println(channel);
-    return;
-  }
-
-  target = clampServoAngle(channel, target);
-
-  int start = neutralAngles[channel];
-  int delta = target - start;
-  int steps = max(1, duration / 20);
-  float stepVal = (float)delta / (float)steps;
-
-  for (int i = 1; i <= steps; i++)
-  {
-    int val = start + (int)(stepVal * i);
-    val = clampServoAngle(channel, val);
-    int pwmVal = angleToPWM(val);
-    setPWMForChannel(channel, pwmVal);
-    delay(30);
-  }
-
-  neutralAngles[channel] = target;
-
-  if (channel == HEAD_YAW)
-  {
-    lastKnownHeadPos = target;
-  }
-}
-
-int clampServoAngle(int channel, int angle)
-{
-  if (channel < 0 || channel > 15)
-    return angle;
-  return constrain(angle, servoMin[channel], servoMax[channel]);
-}
-
-bool isConfiguredChannel(int channel)
-{
-  return channel == L_HIP_PITCH || channel == L_HIP_ROLL || channel == L_KNEE ||
-         channel == R_HIP_PITCH || channel == R_HIP_ROLL || channel == R_KNEE ||
-         channel == HEAD_YAW || channel == HEAD_PITCH;
-}
-
-int angleToPWM(int angle)
-{
-  angle = constrain(angle, 0, 180);
-  int pulse = map(angle, 0, 180, minPulse, maxPulse);
-  int pwmVal = (int)((pulse * 4096.0) / 20000.0);
-  return constrain(pwmVal, 0, 4095);
-}
-
-void setPWMForChannel(int channel, int pwmVal)
-{
-  if (channel == HEAD_YAW || channel == HEAD_PITCH)
-  {
-    pwmUpper.setPWM(channel, 0, pwmVal);
-  }
-  else
-  {
-    pwmLower.setPWM(channel, 0, pwmVal);
   }
 }

@@ -1,0 +1,9 @@
+{
+  "name": "Mood",
+  "version": "1.0.0",
+  "dependencies": [
+    {
+      "name": "Eyes"
+    }
+  ]
+}
