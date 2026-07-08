@@ -1,0 +1,10 @@
+{
+  "name": "Behaviour",
+  "version": "1.0.0",
+  "dependencies": [
+    { "name": "Mood" },
+    { "name": "Animations" },
+    { "name": "Motion" },
+    { "name": "Servos" }
+  ]
+}

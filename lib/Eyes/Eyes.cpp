@@ -154,6 +154,10 @@ void eyesRestoreMood() {
     case MOOD_SHY:
       eyesLookLeft();
       break;
+
+    case MOOD_ASLEEP:
+      eyesAsleep();
+      break;
     
     default:
       eyesNeutral();
@@ -186,12 +190,18 @@ void eyesSleepy() {
   eyesDrawPNG("/slow_blink_2.png");
 }
 
+void eyesAsleep() {
+  currentEyeExpression = EYES_ASLEEP;
+  eyesDrawPNG("/closed_tight.png");
+}
+
 void eyesSetExpression(EyeExpression expression) {
   switch (expression) {
     case EYES_HAPPY:  eyesHappy();  break;
     case EYES_SHY:    eyesShy();    break;
     case EYES_BORED:  eyesBored();  break;
     case EYES_SLEEPY: eyesSleepy(); break;
+    case EYES_ASLEEP: eyesAsleep(); break;
     default:          eyesNeutral(); break;
   }
 }

@@ -8,11 +8,14 @@ enum MoodState {
     MOOD_EXCITED,
     MOOD_SHY,
     MOOD_SLEEPY,
-    MOOD_BORED
+    MOOD_BORED,
+    MOOD_ASLEEP
 };
 
 void moodInit();
 void moodUpdate();
+
+void updateSleepTimer();
 
 void setMood(MoodState mood);
 MoodState getMood();

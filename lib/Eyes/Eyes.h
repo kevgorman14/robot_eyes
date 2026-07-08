@@ -28,7 +28,8 @@ enum EyeExpression {
   EYES_HAPPY,
   EYES_SHY,
   EYES_BORED,
-  EYES_SLEEPY
+  EYES_SLEEPY,
+  EYES_ASLEEP
 };
 
 void eyesSetExpression(EyeExpression expression);
@@ -36,6 +37,7 @@ void eyesRestoreExpression();
 
 void eyesBored();
 void eyesSleepy();
+void eyesAsleep();
 
 // Public API Functions
 bool eyesInit();

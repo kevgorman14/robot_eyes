@@ -13,6 +13,12 @@ static const unsigned long BORED_TIME  = 20000;
 static const unsigned long SLEEPY_TIME = 60000;
 static const unsigned long IDLE_ACTION_TIME = 20000;
 
+static const unsigned long SLEEP_TIMEOUT = 120000;  // 120 seconds
+static const unsigned long ASLEEP_TIME = 200000;    // 200 seconds
+
+static unsigned long sleepStartTime = 0;
+static bool sleepTimerActive = false;
+
 void moodInit() {
   currentMoodState = MOOD_NEUTRAL;
   lastMoodChange = millis();
@@ -28,6 +34,14 @@ void setMood(MoodState mood)
     currentMoodState = mood;
     lastMoodChange = millis();
     lastInteractionTime = millis();   // add this line
+
+    if (mood == MOOD_SLEEPY) {
+      sleepStartTime = millis();
+      sleepTimerActive = true;
+    } else {
+      sleepTimerActive = false;
+    }
+
 
     switch (mood)
     {
@@ -49,11 +63,18 @@ void setMood(MoodState mood)
         case MOOD_SLEEPY:
             currentMood = "SLEEPY";
             eyesSetExpression(EYES_SLEEPY);
+            sleepStartTime = millis();
+            sleepTimerActive = true;
             break;
 
         case MOOD_BORED:
             currentMood = "BORED";
             eyesSetExpression(EYES_BORED);
+            break;
+          
+          case MOOD_ASLEEP:
+            currentMood = "ASLEEP";
+            eyesSetExpression(EYES_ASLEEP);
             break;
 
         case MOOD_NEUTRAL:
@@ -78,7 +99,21 @@ const char* moodName() {
     case MOOD_SHY:     return "SHY";
     case MOOD_SLEEPY:  return "SLEEPY";
     case MOOD_BORED:   return "BORED";
+    case MOOD_ASLEEP:  return "Asleep";
     default:           return "NEUTRAL";
+  }
+}
+
+void updateSleepTimer() {
+  if(!sleepTimerActive) return;
+
+  if (millis() - sleepStartTime >= SLEEP_TIMEOUT) {
+    sleepTimerActive = false;
+
+    setMood(MOOD_NEUTRAL);
+    lastInteractionTime = millis();
+
+    Serial.println("[MOOD] Waking up after nap.");
   }
 }
 
@@ -114,16 +149,20 @@ void moodUpdate() {
     lastMoodChange = now;
   }
 
+  if (inactiveTime > ASLEEP_TIME) {
+    if (currentMoodState != MOOD_ASLEEP) {
+      setMood(MOOD_ASLEEP);
+    }
+    return;
+  }
+
   if (inactiveTime > SLEEPY_TIME) {
     if (currentMoodState != MOOD_SLEEPY) {
-      setMood(MOOD_SLEEPY);
+      if (now - lastIdleAction > IDLE_ACTION_TIME) {
+        animSleepy(1);
+        lastIdleAction = now;
+      }
     }
-
-    if (now - lastIdleAction > IDLE_ACTION_TIME) {
-      animSleepy(1);
-      lastIdleAction = now;
-    }
-
     return;
   }
 

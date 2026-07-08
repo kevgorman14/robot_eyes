@@ -6,6 +6,7 @@
 #include "Eyes.h"
 #include "Mood.h"
 #include"SerialCommands.h"
+#include "Behaviour.h"
 
 void setup() {
   Serial.begin(115200);
@@ -15,7 +16,7 @@ void setup() {
   servoInit();
   
   moodInit();
-
+  behaviourInit();
   poseSit();
   serialCommandsInit();
 
@@ -26,5 +27,7 @@ void setup() {
 
 void loop() {
   serialCommandsUpdate();
+  behaviourUpdate();
   moodUpdate();
+  updateSleepTimer();
 }

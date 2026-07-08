@@ -8,6 +8,7 @@
 #include "Eyes.h"
 #include "Globals.h"
 #include "Config.h"
+#include "Behaviour.h"
 
 void serialCommandsInit() {
   Serial.println("Serial commands ready. Type HELP.");
@@ -43,19 +44,23 @@ static int getNumberAfterLastSpace(const String& cmd, int defaultValue = 1) {
 }
 
 static void handleMoodCommand(const String& cmd) {
-  if (cmd == "MOOD HAPPY") setMood(MOOD_HAPPY);
-  else if (cmd == "MOOD EXCITED") setMood(MOOD_EXCITED);
-  else if (cmd == "MOOD SHY") setMood(MOOD_SHY);
-  else if (cmd == "MOOD SLEEPY") setMood(MOOD_SLEEPY);
-  else if (cmd == "MOOD BORED") setMood(MOOD_BORED);
-  else if (cmd == "MOOD NEUTRAL") setMood(MOOD_NEUTRAL);
+  if (cmd == "MOOD HAPPY") behaviourSetMood(MOOD_HAPPY);
+  else if (cmd == "MOOD EXCITED") behaviourSetMood(MOOD_EXCITED);
+  else if (cmd == "MOOD SHY") behaviourSetMood(MOOD_SHY);
+  else if (cmd == "MOOD SLEEPY") behaviourSetMood(MOOD_SLEEPY);
+  else if (cmd == "MOOD BORED") behaviourSetMood(MOOD_BORED);
+  else if (cmd == "MOOD NEUTRAL") behaviourSetMood(MOOD_NEUTRAL);
   else Serial.println("[ERROR] Unknown mood");
 }
 
 static void handleEventCommand(const String& cmd) {
-  if (cmd == "EVENT KEVIN") moodKevinSeen();
-  else if (cmd == "EVENT UNKNOWN") moodUnknownSeen();
-  else if (cmd == "EVENT NO_FACE") moodNoFace();
+  if (cmd == "EVENT KEVIN") behaviourEventKevin();
+  else if (cmd == "EVENT UNKNOWN") behaviourEventUnknown();
+  else if (cmd == "EVENT NO_FACE") behaviourEventNoFace();
+  else if (cmd.startsWith("EVENT TURN")) {
+    int amount = getNumberAfterLastSpace(cmd, 0);
+    behaviourEventTurn(amount);
+  }
   else Serial.println("[ERROR] Unknown event");
 }
 
