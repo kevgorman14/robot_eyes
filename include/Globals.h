@@ -5,7 +5,7 @@
 #include "Config.h"
 
 extern Adafruit_PWMServoDriver pwmLower;
-extern Adafruit_PWMServoDriver pwmUpper;
+// extern Adafruit_PWMServoDriver pwmUpper;
 
 extern int servoMin[16];
 extern int servoMax[16];
@@ -31,8 +31,8 @@ extern unsigned long lastKevinGreeting;
 extern bool hasSeenKevinSinceBoot;
 
 extern bool noFaceActive;
-extern bool noFaceJustLooked;
+// extern bool noFaceJustLooked;
 extern int noFaceCycle;
 extern unsigned long noFaceStart;
 
-extern int lastKnownHeadPos;
+// extern int lastKnownHeadPos;

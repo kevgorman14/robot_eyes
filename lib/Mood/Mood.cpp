@@ -1,7 +1,7 @@
 #include "Mood.h"
 #include "Animations.h"
 #include "Motion.h"
-#include "Eyes.h"
+// #include "Eyes.h"
 #include "Globals.h"
 
 static MoodState currentMoodState = MOOD_NEUTRAL;
@@ -47,40 +47,40 @@ void setMood(MoodState mood)
     {
         case MOOD_HAPPY:
             currentMood = "HAPPY";
-            eyesSetExpression(EYES_HAPPY);
+            // eyesSetExpression(EYES_HAPPY);
             break;
 
         case MOOD_EXCITED:
             currentMood = "EXCITED";
-            eyesSetExpression(EYES_HAPPY);
+            // eyesSetExpression(EYES_HAPPY);
             break;
 
         case MOOD_SHY:
             currentMood = "SHY";
-            eyesSetExpression(EYES_SHY);
+            // eyesSetExpression(EYES_SHY);
             break;
 
         case MOOD_SLEEPY:
             currentMood = "SLEEPY";
-            eyesSetExpression(EYES_SLEEPY);
+            // eyesSetExpression(EYES_SLEEPY);
             sleepStartTime = millis();
             sleepTimerActive = true;
             break;
 
         case MOOD_BORED:
             currentMood = "BORED";
-            eyesSetExpression(EYES_BORED);
+            // eyesSetExpression(EYES_BORED);
             break;
           
           case MOOD_ASLEEP:
             currentMood = "ASLEEP";
-            eyesSetExpression(EYES_ASLEEP);
+            // eyesSetExpression(EYES_ASLEEP);
             break;
 
         case MOOD_NEUTRAL:
         default:
             currentMood = "NEUTRAL";
-            eyesSetExpression(EYES_NEUTRAL);
+            // eyesSetExpression(EYES_NEUTRAL);
             break;
     }
 

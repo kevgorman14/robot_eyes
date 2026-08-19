@@ -20,23 +20,23 @@ void poseStand() {
   smoothMove(R_KNEE, neutral_R_knee, 700);
 }
 
-void centreHead() {
-  smoothMove(HEAD_YAW, neutral_head_yaw, 400);
-  smoothMove(HEAD_PITCH, neutral_head_pitch, 400);
-}
+// void centreHead() {
+//   smoothMove(HEAD_YAW, neutral_head_yaw, 400);
+//   smoothMove(HEAD_PITCH, neutral_head_pitch, 400);
+// }
 
-void lookLeft() {
-  smoothMove(HEAD_YAW, head_left, 400);
-}
+// void lookLeft() {
+//   smoothMove(HEAD_YAW, head_left, 400);
+// }
 
-void lookRight() {
-  smoothMove(HEAD_YAW, head_right, 400);
-}
+// void lookRight() {
+//   smoothMove(HEAD_YAW, head_right, 400);
+// }
 
-void lookUp() {
-  smoothMove(HEAD_PITCH, head_up, 400);
-}
+// void lookUp() {
+//   smoothMove(HEAD_PITCH, head_up, 400);
+// }
 
-void lookDown() {
-  smoothMove(HEAD_PITCH, head_down, 400);
-}
+// void lookDown() {
+//   smoothMove(HEAD_PITCH, head_down, 400);
+// }

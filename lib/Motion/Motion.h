@@ -4,8 +4,8 @@
 
 void poseSit();
 void poseStand();
-void centreHead();
-void lookLeft();
-void lookRight();
-void lookUp();
-void lookDown();
+// void centreHead();
+// void lookLeft();
+// void lookRight();
+// void lookUp();
+// void lookDown();

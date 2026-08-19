@@ -18,8 +18,8 @@ void servoInit() {
   pwmLower.begin();
   pwmLower.setPWMFreq(SERVO_FREQ);
 
-  pwmUpper.begin();
-  pwmUpper.setPWMFreq(SERVO_FREQ);
+  // pwmUpper.begin();
+  // pwmUpper.setPWMFreq(SERVO_FREQ);
 }
 
 void setupServoLimits() {
@@ -53,15 +53,15 @@ void setupServoLimits() {
   servoMax[R_KNEE] = 150;
   neutralAngles[R_KNEE] = neutral_R_knee;
 
-  servoMin[HEAD_YAW] = head_left;
-  servoMax[HEAD_YAW] = head_right;
-  neutralAngles[HEAD_YAW] = neutral_head_yaw;
+  // servoMin[HEAD_YAW] = head_left;
+  // servoMax[HEAD_YAW] = head_right;
+  // neutralAngles[HEAD_YAW] = neutral_head_yaw;
 
-  servoMin[HEAD_PITCH] = head_up;
-  servoMax[HEAD_PITCH] = head_down;
-  neutralAngles[HEAD_PITCH] = neutral_head_pitch;
+  // servoMin[HEAD_PITCH] = head_up;
+  // servoMax[HEAD_PITCH] = head_down;
+  // neutralAngles[HEAD_PITCH] = neutral_head_pitch;
 
-  lastKnownHeadPos = neutral_head_yaw;
+  // lastKnownHeadPos = neutral_head_yaw;
 }
 
 int clampServoAngle(int channel, int angle) {
@@ -77,17 +77,17 @@ int angleToPWM(int angle) {
 }
 
 void setPWMForChannel(int channel, int pwmVal) {
-  if (channel == HEAD_YAW || channel == HEAD_PITCH) {
-    pwmUpper.setPWM(channel, 0, pwmVal);
-  } else {
-    pwmLower.setPWM(channel, 0, pwmVal);
-  }
+  // if (channel == HEAD_YAW || channel == HEAD_PITCH) {
+  //   pwmUpper.setPWM(channel, 0, pwmVal);
+  // } else {
+  pwmLower.setPWM(channel, 0, pwmVal);
+  // }
 }
 
 bool isConfiguredChannel(int channel) {
   return channel == L_HIP_PITCH || channel == L_HIP_ROLL || channel == L_KNEE ||
-         channel == R_HIP_PITCH || channel == R_HIP_ROLL || channel == R_KNEE ||
-         channel == HEAD_YAW || channel == HEAD_PITCH;
+         channel == R_HIP_PITCH || channel == R_HIP_ROLL || channel == R_KNEE;
+         // channel == HEAD_YAW || channel == HEAD_PITCH;
 }
 
 void smoothMove(int channel, int target, int duration) {
@@ -114,9 +114,9 @@ void smoothMove(int channel, int target, int duration) {
 
   neutralAngles[channel] = target;
 
-  if (channel == HEAD_YAW) {
-    lastKnownHeadPos = target;
-  }
+  // if (channel == HEAD_YAW) {
+  //   lastKnownHeadPos = target;
+  // }
 }
 int clampServoAngle(int channel, int angle);
 bool isConfiguredChannel(int channel);

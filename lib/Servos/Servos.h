@@ -4,7 +4,7 @@
 #include <Adafruit_PWMServoDriver.h>
 
 extern Adafruit_PWMServoDriver pwmLower;
-extern Adafruit_PWMServoDriver pwmUpper;
+// extern Adafruit_PWMServoDriver pwmUpper;
 
 void servoInit();
 void setupServoLimits();

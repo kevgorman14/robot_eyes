@@ -10,5 +10,5 @@ void behaviourSetMood(MoodState mood);
 
 void behaviourEventKevin();
 void behaviourEventUnknown();
-void behaviourEventNoFace();
-void behaviourEventTurn(int amount);
+// void behaviourEventNoFace();
+// void behaviourEventTurn(int amount);

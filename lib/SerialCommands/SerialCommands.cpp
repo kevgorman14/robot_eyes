@@ -5,10 +5,11 @@
 #include "Motion.h"
 #include "Animations.h"
 #include "Mood.h"
-#include "Eyes.h"
+// #include "Eyes.h"
 #include "Globals.h"
 #include "Config.h"
 #include "Behaviour.h"
+#include "Sensors.h"
 
 void serialCommandsInit() {
   Serial.println("Serial commands ready. Type HELP.");
@@ -22,13 +23,14 @@ void printHelp() {
   Serial.println("STAND / POSE STAND");
   Serial.println("HOME");
   Serial.println("CHx angle       example: CH0 60");
-  Serial.println("HEAD angle      example: HEAD 90");
+  // Serial.println("HEAD angle      example: HEAD 90");
   Serial.println("MOOD HAPPY / EXCITED / SHY / SLEEPY / BORED / NEUTRAL");
   Serial.println("EVENT KEVIN / UNKNOWN / NO_FACE");
-  Serial.println("EYES NEUTRAL / HAPPY / BLINK / LEFT / RIGHT / SLOW");
+  // Serial.println("EYES NEUTRAL / HAPPY / BLINK / LEFT / RIGHT / SLOW");
   Serial.println("ANIM EXCITED n / SLEEPY n / SHY n / HAPPY n / STRETCH n");
   Serial.println("ANIM WAVEFB n / WAVEFB_R n / WAVESIDE n / WAVESIDE_R n");
   Serial.println("ANIM WAVEDOUBLE n / WAVEHAPPY n / SWING n / KICK n / TAP n");
+  Serial.println("FLEX - read right knee flex sensor");
   Serial.println("=========================");
   Serial.println();
 }
@@ -55,25 +57,25 @@ static void handleMoodCommand(const String& cmd) {
 
 static void handleEventCommand(const String& cmd) {
   if (cmd == "EVENT KEVIN") behaviourEventKevin();
-  else if (cmd == "EVENT UNKNOWN") behaviourEventUnknown();
-  else if (cmd == "EVENT NO_FACE") behaviourEventNoFace();
-  else if (cmd.startsWith("EVENT TURN")) {
-    int amount = getNumberAfterLastSpace(cmd, 0);
-    behaviourEventTurn(amount);
-  }
+  // else if (cmd == "EVENT UNKNOWN") behaviourEventUnknown();
+  // else if (cmd == "EVENT NO_FACE") behaviourEventNoFace();
+  // else if (cmd.startsWith("EVENT TURN")) {
+  //   int amount = getNumberAfterLastSpace(cmd, 0);
+  //   behaviourEventTurn(amount);
+  //}
   else Serial.println("[ERROR] Unknown event");
 }
 
-static void handleEyesCommand(const String& cmd) {
-  if (cmd == "EYES NEUTRAL") eyesNeutral();
-  else if (cmd == "EYES HAPPY") eyesHappy();
-  else if (cmd == "EYES BLINK") eyesBlink();
-  else if (cmd == "EYES LEFT") eyesLookLeft();
-  else if (cmd == "EYES RIGHT") eyesLookRight();
-  else if (cmd == "EYES SLOW") eyesSlowBlink();
-  else if (cmd == "EYES LIST") eyesListFiles();
-  else Serial.println("[ERROR] Unknown eyes command");
-}
+// static void handleEyesCommand(const String& cmd) {
+//   if (cmd == "EYES NEUTRAL") eyesNeutral();
+//   else if (cmd == "EYES HAPPY") eyesHappy();
+//   else if (cmd == "EYES BLINK") eyesBlink();
+//   else if (cmd == "EYES LEFT") eyesLookLeft();
+//   else if (cmd == "EYES RIGHT") eyesLookRight();
+//   else if (cmd == "EYES SLOW") eyesSlowBlink();
+//   else if (cmd == "EYES LIST") eyesListFiles();
+//   else Serial.println("[ERROR] Unknown eyes command");
+// }
 
 static void handleAnimCommand(const String& cmd) {
   int cycles = getNumberAfterLastSpace(cmd, 1);
@@ -92,6 +94,7 @@ static void handleAnimCommand(const String& cmd) {
   else if (cmd.startsWith("ANIM SWING")) animSwing(cycles);
   else if (cmd.startsWith("ANIM KICK")) animKick(cycles);
   else if (cmd.startsWith("ANIM TAP")) animTap(cycles);
+
   else Serial.println("[ERROR] Unknown animation");
 }
 
@@ -108,16 +111,16 @@ static void handleChannelCommand(const String& cmd) {
   smoothMove(channel, angle, 300);
 }
 
-static void handleHeadCommand(const String& cmd) {
-  int spaceIndex = cmd.indexOf(' ');
-  if (spaceIndex < 0) {
-    Serial.println("[ERROR] Use HEAD angle, example HEAD 90");
-    return;
-  }
+// static void handleHeadCommand(const String& cmd) {
+//   int spaceIndex = cmd.indexOf(' ');
+//   if (spaceIndex < 0) {
+//     Serial.println("[ERROR] Use HEAD angle, example HEAD 90");
+//     return;
+//   }
 
-  int angle = cmd.substring(spaceIndex + 1).toInt();
-  smoothMove(HEAD_YAW, angle, 300);
-}
+//   int angle = cmd.substring(spaceIndex + 1).toInt();
+//   smoothMove(HEAD_YAW, angle, 300);
+// }
 
 static void handleCommand(String cmd) {
   cmd.trim();
@@ -135,12 +138,19 @@ static void handleCommand(String cmd) {
   else if (cmd == "HOME") poseSit();
 
   else if (cmd.startsWith("CH")) handleChannelCommand(cmd);
-  else if (cmd.startsWith("HEAD")) handleHeadCommand(cmd);
+  // else if (cmd.startsWith("HEAD")) handleHeadCommand(cmd);
 
   else if (cmd.startsWith("MOOD")) handleMoodCommand(cmd);
   else if (cmd.startsWith("EVENT")) handleEventCommand(cmd);
-  else if (cmd.startsWith("EYES")) handleEyesCommand(cmd);
+  // else if (cmd.startsWith("EYES")) handleEyesCommand(cmd);
   else if (cmd.startsWith("ANIM")) handleAnimCommand(cmd);
+
+   else if (cmd == "FLEX") {
+    int flexValue = readRightKneeFlex();
+
+    Serial.print("[FLEX] Right knee raw: ");
+    Serial.println(flexValue);
+  }
 
   else Serial.println("[ERROR] Unknown command. Type HELP.");
 }

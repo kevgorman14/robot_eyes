@@ -1,7 +1,7 @@
 #include "Globals.h"
 
 Adafruit_PWMServoDriver pwmLower = Adafruit_PWMServoDriver(LOWER_PCA_ADDR);
-Adafruit_PWMServoDriver pwmUpper = Adafruit_PWMServoDriver(UPPER_PCA_ADDR);
+// Adafruit_PWMServoDriver pwmUpper = Adafruit_PWMServoDriver(UPPER_PCA_ADDR);
 
 int servoMin[16];
 int servoMax[16];
@@ -24,11 +24,11 @@ unsigned long lastStandTime = 0;
 unsigned long lastKevinSeen = 0;
 unsigned long lastKevinGreeting = 0;
 
-bool hasSeenKevinSinceBoot = false;
+// bool hasSeenKevinSinceBoot = false;
 
 bool noFaceActive = false;
-bool noFaceJustLooked = false;
+// bool noFaceJustLooked = false;
 int noFaceCycle = 0;
 unsigned long noFaceStart = 0;
 
-int lastKnownHeadPos = neutral_head_yaw;
+// int lastKnownHeadPos = neutral_head_yaw;

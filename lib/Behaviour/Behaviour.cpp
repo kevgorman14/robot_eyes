@@ -21,15 +21,15 @@ void behaviourInit()
     lastUnknownEvent = 0;
     lastIdleCheck = millis();
 
-    noFaceActive = false;
-    noFaceCycle = 0;
-    noFaceJustLooked = false;
-    noFaceStart = 0;
+    // noFaceActive = false;
+    // noFaceCycle = 0;
+    // noFaceJustLooked = false;
+    // noFaceStart = 0;
 }
 
 void behaviourSetMood(MoodState mood)
 {
-    noFaceActive = false;
+    // noFaceActive = false;
     lastInteractionTime = millis();
     setMood(mood);
 }
@@ -39,8 +39,8 @@ void behaviourEventKevin()
     unsigned long now = millis();
     lastInteractionTime = now;
 
-    noFaceActive = false;
-    noFaceCycle = 0;
+    // noFaceActive = false;
+    // noFaceCycle = 0;
 
     if (now - lastKevinEvent < KEVIN_COOLDOWN) {
         setMood(MOOD_HAPPY);
@@ -63,7 +63,7 @@ void behaviourEventUnknown()
     unsigned long now = millis();
     lastInteractionTime = now;
 
-    noFaceActive = false;
+    // noFaceActive = false;
 
     if (now - lastUnknownEvent < UNKNOWN_COOLDOWN) {
         setMood(MOOD_SHY);
@@ -76,76 +76,76 @@ void behaviourEventUnknown()
     animShy(1);
 }
 
-void behaviourEventNoFace()
-{
-    unsigned long now = millis();
+// void behaviourEventNoFace()
+// {
+//     unsigned long now = millis();
 
-    if (!noFaceActive) {
-        noFaceActive = true;
-        noFaceStart = now;
-        noFaceCycle = 0;
-        noFaceJustLooked = false;
+//     if (!noFaceActive) {
+//         noFaceActive = true;
+//         noFaceStart = now;
+//         noFaceCycle = 0;
+//         noFaceJustLooked = false;
 
-        Serial.println("[BEHAVIOUR] No face active");
-    }
-}
+//         Serial.println("[BEHAVIOUR] No face active");
+//     }
+// }
 
-void behaviourEventTurn(int amount)
-{
-    noFaceActive = false;
-    lastInteractionTime = millis();
+// // void behaviourEventTurn(int amount)
+// //{
+//     // noFaceActive = false;
+//     // lastInteractionTime = millis();
 
-    int target = constrain(lastKnownHeadPos + amount, head_left, head_right);
+//     // int target = constrain(lastKnownHeadPos + amount, head_left, head_right);
 
-    smoothMove(HEAD_YAW, target, 300);
-    lastKnownHeadPos = target;
-}
+//     // smoothMove(HEAD_YAW, target, 300);
+//     // lastKnownHeadPos = target;
+// // }
 
-static void handleNoFaceSearch()
-{
-    if (!noFaceActive) return;
+// static void handleNoFaceSearch()
+// {
+//     if (!noFaceActive) return;
 
-    unsigned long now = millis();
+//     unsigned long now = millis();
 
-    if (now - noFaceStart < 10000) return;
+//     if (now - noFaceStart < 10000) return;
 
-    int rememberedPos = constrain(lastKnownHeadPos, head_left, head_right);
+//     int rememberedPos = constrain(lastKnownHeadPos, head_left, head_right);
 
-    if (noFaceCycle == 0) {
-        Serial.println("[BEHAVIOUR] No face: looking last known position");
+//     if (noFaceCycle == 0) {
+//         Serial.println("[BEHAVIOUR] No face: looking last known position");
 
-        smoothMove(HEAD_YAW, rememberedPos, 600);
+//         smoothMove(HEAD_YAW, rememberedPos, 600);
 
-        noFaceCycle++;
-        noFaceStart = now;
-    }
-    else if (noFaceCycle == 1) {
-        Serial.println("[BEHAVIOUR] No face: small search");
+//         noFaceCycle++;
+//         noFaceStart = now;
+//     }
+//     else if (noFaceCycle == 1) {
+//         Serial.println("[BEHAVIOUR] No face: small search");
 
-        smoothMove(HEAD_YAW, constrain(rememberedPos - 15, head_left, head_right), 600);
-        smoothMove(HEAD_YAW, constrain(rememberedPos + 15, head_left, head_right), 600);
-        smoothMove(HEAD_YAW, rememberedPos, 600);
+//         smoothMove(HEAD_YAW, constrain(rememberedPos - 15, head_left, head_right), 600);
+//         smoothMove(HEAD_YAW, constrain(rememberedPos + 15, head_left, head_right), 600);
+//         smoothMove(HEAD_YAW, rememberedPos, 600);
 
-        noFaceCycle++;
-        noFaceStart = now;
-    }
-    else if (noFaceCycle == 2) {
-        Serial.println("[BEHAVIOUR] No face: wide search");
+//         noFaceCycle++;
+//         noFaceStart = now;
+//     }
+//     else if (noFaceCycle == 2) {
+//         Serial.println("[BEHAVIOUR] No face: wide search");
 
-        smoothMove(HEAD_YAW, head_left, 800);
-        smoothMove(HEAD_YAW, head_right, 800);
-        smoothMove(HEAD_YAW, neutral_head_yaw, 800);
+//         smoothMove(HEAD_YAW, head_left, 800);
+//         smoothMove(HEAD_YAW, head_right, 800);
+//         smoothMove(HEAD_YAW, neutral_head_yaw, 800);
 
-        noFaceCycle++;
-        noFaceStart = now;
-    }
-    else {
-        Serial.println("[BEHAVIOUR] No face: bored");
+//         noFaceCycle++;
+//         noFaceStart = now;
+//     }
+//     else {
+//         Serial.println("[BEHAVIOUR] No face: bored");
 
-        noFaceActive = false;
-        setMood(MOOD_BORED);
-    }
-}
+//         noFaceActive = false;
+//         setMood(MOOD_BORED);
+//     }
+// }
 
 static void handleIdleBehaviour()
 {
@@ -170,6 +170,6 @@ static void handleIdleBehaviour()
 
 void behaviourUpdate()
 {
-    handleNoFaceSearch();
-    // handleIdleBehaviour();
+    // handleNoFaceSearch();
+    handleIdleBehaviour();
 }
