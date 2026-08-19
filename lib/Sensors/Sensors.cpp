@@ -4,8 +4,13 @@
 
 void sensorsInit() {
     pinMode(RIGHT_KNEE_FLEX_PIN, INPUT);
+    pinMode(LEFT_KNEE_FLEX_PIN, INPUT);
 }
 
 int readRightKneeFlex() {
     return analogRead(RIGHT_KNEE_FLEX_PIN);
+}
+
+int readLeftKneeFlex() {
+    return analogRead(LEFT_KNEE_FLEX_PIN);
 }

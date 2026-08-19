@@ -30,7 +30,8 @@ void printHelp() {
   Serial.println("ANIM EXCITED n / SLEEPY n / SHY n / HAPPY n / STRETCH n");
   Serial.println("ANIM WAVEFB n / WAVEFB_R n / WAVESIDE n / WAVESIDE_R n");
   Serial.println("ANIM WAVEDOUBLE n / WAVEHAPPY n / SWING n / KICK n / TAP n");
-  Serial.println("FLEX - read right knee flex sensor");
+  Serial.println("FLEX RIGHT - read right knee flex sensor");
+  Serial.println("FLEX LEFT - read left knee flex sensor");
   Serial.println("=========================");
   Serial.println();
 }
@@ -145,10 +146,16 @@ static void handleCommand(String cmd) {
   // else if (cmd.startsWith("EYES")) handleEyesCommand(cmd);
   else if (cmd.startsWith("ANIM")) handleAnimCommand(cmd);
 
-   else if (cmd == "FLEX") {
+   else if (cmd == "FLEX RIGHT") {
     int flexValue = readRightKneeFlex();
 
-    Serial.print("[FLEX] Right knee raw: ");
+    Serial.print("[FLEX RIGHT] Right knee raw: ");
+    Serial.println(flexValue);
+  }
+  else if (cmd == "FLEX LEFT") {
+    int flexValue = readLeftKneeFlex();
+
+    Serial.print("[FLEX LEFT] Left knee raw: ");
     Serial.println(flexValue);
   }
 

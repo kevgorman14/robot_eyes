@@ -73,4 +73,5 @@ constexpr int R_knee_up = 150;           // sitting/up
 // =====================
 // Sensors
 // =====================
-constexpr int RIGHT_KNEE_FLEX_PIN = D0;
+constexpr int RIGHT_KNEE_FLEX_PIN = A0;
+constexpr int LEFT_KNEE_FLEX_PIN = A2;
