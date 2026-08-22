@@ -28,6 +28,7 @@ void setup() {
 }
 
 void loop() {
+  sensorsUpdate();
   serialCommandsUpdate();
   behaviourUpdate();
   moodUpdate();

@@ -32,6 +32,8 @@ void printHelp() {
   Serial.println("ANIM WAVEDOUBLE n / WAVEHAPPY n / SWING n / KICK n / TAP n");
   Serial.println("FLEX RIGHT - read right knee flex sensor");
   Serial.println("FLEX LEFT - read left knee flex sensor");
+  Serial.println("FLEX LIVE - start live plotting of flex sensors");
+  Serial.println("FLEX STOP - stop live plotting of flex sensors");
   Serial.println("=========================");
   Serial.println();
 }
@@ -157,6 +159,12 @@ static void handleCommand(String cmd) {
 
     Serial.print("[FLEX LEFT] Left knee raw: ");
     Serial.println(flexValue);
+  }
+  else if (cmd == "FLEX LIVE") {
+    startFlexLive();
+  }
+  else if (cmd == "FLEX STOP") {
+    stopFlexLive();
   }
 
   else Serial.println("[ERROR] Unknown command. Type HELP.");
